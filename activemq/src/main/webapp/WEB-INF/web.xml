@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+	<display-name>JPetStore</display-name>
+	<description>Online Pet Store Sample Application</description>
+	<servlet>
+		<servlet-name>JMSListener</servlet-name>
+		<servlet-class>org.vivus.activemq.example1.JMSListener</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<listener>
+		<listener-class>org.vivus.activemq.example1.JMSListener</listener-class>
+	</listener>
+	<servlet>
+		<servlet-name>TestServlet</servlet-name>
+		<servlet-class>org.vivus.activemq.example1.TestServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TestServlet</servlet-name>
+		<url-pattern>/TestServlet</url-pattern>
+	</servlet-mapping>
+</web-app>
