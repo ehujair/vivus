@@ -2,9 +2,12 @@ package org.vivus.mybatis.session;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.apache.ibatis.datasource.DataSourceFactory;
+import org.apache.ibatis.datasource.jndi.JndiDataSourceFactory;
 import org.apache.ibatis.datasource.pooled.PooledDataSourceFactory;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.mapping.Environment;
@@ -27,6 +30,19 @@ public class SqlSessionFactoryTest {
 
 	@Test
 	public void buildSqlSessionFactory2() {
+//		DataSourceFactory dataSourceFactory = new DataSourceFactory() {
+//			DataSource dataSource;
+//
+//			public void setProperties(Properties props) {
+//			}
+//
+//			public DataSource getDataSource() {
+//				return dataSource;
+//			}
+//
+//		};
+//		DataSource dataSource = dataSourceFactory.getDataSource();
+//		DataSource dataSource = new JndiDataSourceFactory().getDataSource();
 		DataSource dataSource = new PooledDataSourceFactory().getDataSource();
 		TransactionFactory transactionFactory = new JdbcTransactionFactory();
 		Environment environment = new Environment("development", transactionFactory, dataSource);

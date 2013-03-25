@@ -5,13 +5,21 @@ import java.util.List;
 import org.vivus.mybatis.domain.Account;
 
 public interface AccountMapper {
-	Account selectAccount(String userName);
+	/**
+	 * Not support,no configuration in xml
+	 * @param account
+	 */
+	int insert(Account account);
 
-	List<Account> findAll();
+	int insertAccount(Account account);
 
-	void insert(Account account);
+	int updateAccount(Account account);
 
-	void update(Account account);
+	int deleteAccount(Account account);
 
-	void delete(Account account);
+	Account selectAccount(String id);
+
+	Account selectAccountByName(String userName);
+
+	List<Account> selectAccountDynamic(Account account);
 }
