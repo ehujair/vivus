@@ -27,8 +27,7 @@ public class JavafxPrinter extends Application {
 		// showClassPathJar();
 		// test();
 		launch(args);
-//		print2();
-		Platform.exit();
+		// print2();
 	}
 
 	@Override
@@ -41,11 +40,13 @@ public class JavafxPrinter extends Application {
 				printerJob.endJob();
 			}
 		}
+		Platform.exit();
 	}
 
 	public static void test() {
 		com.sun.javafx.Logging.getCSSLogger();
-		sun.util.logging.PlatformLogger logger = com.sun.javafx.tk.Toolkit.getToolkit().getLogger("css");
+		sun.util.logging.PlatformLogger logger = com.sun.javafx.tk.Toolkit.getToolkit().getLogger(
+				"css");
 		if (logger != null) {
 			System.out.println(logger);
 		}
