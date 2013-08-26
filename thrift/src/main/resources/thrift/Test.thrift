@@ -42,6 +42,8 @@ struct Entity {
 	Message message;
 }
 
+struct Null {}
+
 exception TestException {
 	string code;
 }
@@ -58,8 +60,12 @@ service TestService {
 	 * oneway function
 	 */
 	oneway void onewayFunc(optional string msg);
+
 	string testFunc();
+
 	Result resultFunc(string id, string name) throws (TestException te);
+
+	string testNull();
 }
 
 service ExTestService extends TestService {

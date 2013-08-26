@@ -22,7 +22,7 @@ public class InteractiveSocketServer extends AbstractServer implements Server {
 		Socket socket = null;
 		try {
 			ss = new ServerSocket(port);
-			while (!stoped) {
+			while (!isStop()) {
 				socket = ss.accept();
 				new SocketRunner(socket);
 			}

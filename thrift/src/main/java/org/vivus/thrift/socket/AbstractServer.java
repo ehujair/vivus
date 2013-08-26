@@ -7,7 +7,7 @@ public abstract class AbstractServer implements Server {
 	static Logger logger = LoggerFactory.getLogger(AbstractServer.class);
 
 	protected int port;
-	protected volatile boolean stoped = true;
+	private volatile boolean stoped = true;
 
 	public AbstractServer(int port) {
 		this.port = port;
@@ -22,11 +22,18 @@ public abstract class AbstractServer implements Server {
 
 	protected abstract void start_();
 
+	protected void stop_() {
+	}
+
 	@Override
 	public void stop() {
 		logger.info("======== stoping server ========");
 		stoped = true;
+		stop_();
 		logger.info("======== server stop ========");
 	}
 
+	public boolean isStop() {
+		return stoped;
+	}
 }

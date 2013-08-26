@@ -24,7 +24,7 @@ public class SingleSocketServer extends AbstractServer implements Server {
 		OutputStream outputStream = null;
 		try {
 			ss = new ServerSocket(port);
-			while (!stoped) {
+			while (!isStop()) {
 				socket = ss.accept();
 				inputStream = socket.getInputStream();
 				byte[] r = new byte[2];
