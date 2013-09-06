@@ -10,7 +10,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.test.skip>false</maven.test.skip>
 		<jdk.version>1.7</jdk.version>
-		<com.google.zxing.version>2.1</com.google.zxing.version>
+		<com.google.zxing.version>2.2</com.google.zxing.version>
+		<org.slf4j.version>1.7.2</org.slf4j.version>
 	</properties>
 
 	<dependencies>
@@ -54,6 +55,16 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.24</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${org.slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-jdk14</artifactId>
+			<version>${org.slf4j.version}</version>
 		</dependency>
 	</dependencies>
 

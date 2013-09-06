@@ -34,6 +34,7 @@ import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 public class ZxingTest {
+	public static final String BASE_DIR = "target/test-classes";
 	static Reader reader = new MultiFormatReader();
 	static Writer writer = new MultiFormatWriter();
 	static String CONTENT = "I am a superman.";
@@ -103,6 +104,6 @@ public class ZxingTest {
 	}
 
 	private static String getFileName(String ext) {
-		return ZxingTest.class.getName().replace('.', '/') + ext;
+		return BASE_DIR + ZxingTest.class.getName().replace('.', '/') + ext;
 	}
 }
