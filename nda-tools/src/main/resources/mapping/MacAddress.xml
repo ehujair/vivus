@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.vivus.nda.tools.entity.MacAddressManager">
+	<resultMap type="org.vivus.nda.tools.entity.MacAddress" id="MacAddress">
+		<id property="mac" column="MAC" />
+		<result property="writeTime" column="WRITE_TIME" />
+	</resultMap>
+
+	<select id="loadMacAddress" parameterType="string" resultMap="MacAddress">
+		select <include refid="MacAddressProperties"/> from MAC_ADDRESS where MAC = #{mac}
+	</select>
+
+	<insert id="insertMacAddress" parameterType="org.vivus.nda.tools.entity.MacAddress">
+		insert into MAC_ADDRESS(<include refid="MacAddressProperties"/>)
+		values(#{mac}, #{writeTime});
+	</insert>
+
+	<update id="updateMacAddress" parameterType="org.vivus.nda.tools.entity.MacAddress">
+		update MAC_ADDRESS
+		set WRITE_TIME = #{writeTime}
+		where MAC = #{mac}
+	</update>
+
+	<delete id="deleteMacAddress" parameterType="string">
+		delete from MAC_ADDRESS where MAC = #{mac}
+	</delete>
+
+	<sql id="MacAddressProperties">
+		MAC, WRITE_TIME
+	</sql>
+</mapper>
