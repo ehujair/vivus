@@ -9,6 +9,7 @@ create table KEY_VALUE (
 
 create table MAC_ADDRESS (
     MAC varchar(64),
+    CODE varchar(100),
     WRITE_TIME TIMESTAMP,
     primary key (MAC)
 );

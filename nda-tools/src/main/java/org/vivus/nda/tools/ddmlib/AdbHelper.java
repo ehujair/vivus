@@ -22,6 +22,7 @@ public class AdbHelper {
 
 	IMessageHandler messageHandler;
 	static AndroidDebugBridge bridge;
+	private IDevice device;
 
 	public AdbHelper(IMessageHandler messageHandler) {
 		this.messageHandler = messageHandler;
@@ -36,13 +37,16 @@ public class AdbHelper {
 			AndroidDebugBridge.initIfNeeded(false);
 			bridge = AndroidDebugBridge.createBridge(adbPath, false);
 		}
-		IDevice device = getDevice(bridge);
+		device = getDevice(bridge);
 		writeWifi(device, mac);
 		writeBluetooth(device, mac);
-		printNewMac(device);
 	}
 
-	private void printNewMac(IDevice device) {
+	public void print(String message) {
+		messageHandler.handle(message);
+	}
+
+	public void printNewMac() {
 		IShellOutputReceiver bluetoothReceiver = new IShellOutputReceiver() {
 			@Override
 			public void addOutput(byte[] data, int offset, int length) {

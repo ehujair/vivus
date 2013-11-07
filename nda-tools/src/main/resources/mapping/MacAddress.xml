@@ -3,6 +3,7 @@
 <mapper namespace="org.vivus.nda.tools.entity.MacAddressManager">
 	<resultMap type="org.vivus.nda.tools.entity.MacAddress" id="MacAddress">
 		<id property="mac" column="MAC" />
+		<result property="code" column="CODE" />
 		<result property="writeTime" column="WRITE_TIME" />
 	</resultMap>
 
@@ -12,12 +13,12 @@
 
 	<insert id="insertMacAddress" parameterType="org.vivus.nda.tools.entity.MacAddress">
 		insert into MAC_ADDRESS(<include refid="MacAddressProperties"/>)
-		values(#{mac}, #{writeTime});
+		values(#{mac}, #{code}, #{writeTime});
 	</insert>
 
 	<update id="updateMacAddress" parameterType="org.vivus.nda.tools.entity.MacAddress">
 		update MAC_ADDRESS
-		set WRITE_TIME = #{writeTime}
+		set WRITE_TIME = #{writeTime}, CODE = #{code}
 		where MAC = #{mac}
 	</update>
 
@@ -26,6 +27,6 @@
 	</delete>
 
 	<sql id="MacAddressProperties">
-		MAC, WRITE_TIME
+		MAC, CODE, WRITE_TIME
 	</sql>
 </mapper>

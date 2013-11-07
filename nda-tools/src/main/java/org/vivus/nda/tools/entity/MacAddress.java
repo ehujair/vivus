@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class MacAddress {
 	int mac;
+	String code;
 	Date writeTime;
 
 	public int getMac() {
@@ -12,6 +13,14 @@ public class MacAddress {
 
 	public void setMac(int mac) {
 		this.mac = mac;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public Date getWriteTime() {

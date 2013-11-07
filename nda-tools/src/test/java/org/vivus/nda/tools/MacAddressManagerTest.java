@@ -13,6 +13,7 @@ public class MacAddressManagerTest extends NdaToolsTest {
 	public void testSave() {
 		MacAddress macAddress = new MacAddress();
 		macAddress.setMac(((Engine) engine).getConfiguration().getMacGenerator().generateMac());
+		macAddress.setCode("testCode");
 		macAddress.setWriteTime(new Date());
 		macAddressService.saveMacAddress(macAddress);
 	}
