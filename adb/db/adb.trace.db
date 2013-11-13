@@ -1,0 +1,3 @@
+10-11 15:59:56 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "MAC_ADDRESS" not found; SQL statement:
+insert into MAC_ADDRESS(MAC, WRITE_TIME) values(?, ?); [42102-170]

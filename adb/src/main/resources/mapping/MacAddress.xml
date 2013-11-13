@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.vivus.adb.impl.MacAddressManager">
+	<resultMap type="org.vivus.adb.MacAddress" id="MacAddress">
+		<id property="mac" column="MAC" />
+		<result property="writeTime" column="WRITE_TIME" />
+	</resultMap>
+	
+	<insert id="insertMacAddress" parameterType="org.vivus.adb.MacAddress">
+		insert into MAC_ADDRESS(MAC, WRITE_TIME) values(#{mac}, #{writeTime});
+	</insert>
+</mapper>
