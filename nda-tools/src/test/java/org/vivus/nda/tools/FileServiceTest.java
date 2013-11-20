@@ -96,7 +96,7 @@ public class FileServiceTest extends NdaToolsTest {
 			Assert.assertTrue(StringUtils.isNotBlank(fileItem.getId()));
 			IPathResolver pathResolver = ((Engine) engine).getConfiguration().getPathResolver();
 			Assert.assertTrue(VfsUtil.exist(pathResolver.getBasePath() + fileItem.getPath()));
-			
+
 			fileService.delete(fileItem.getId());
 			FileItem file = fileService.load(fileItem.getId());
 			Assert.assertNull(file);
@@ -125,7 +125,7 @@ public class FileServiceTest extends NdaToolsTest {
 		System.out.println(list);
 		System.out.println(list.size());
 	}
-	
+
 	// 获取指定文件信息
 	@Test
 	public void testLoadFile() throws FileSystemException {
@@ -138,7 +138,7 @@ public class FileServiceTest extends NdaToolsTest {
 			Assert.assertTrue(StringUtils.isNotBlank(fileItem.getId()));
 			IPathResolver pathResolver = ((Engine) engine).getConfiguration().getPathResolver();
 			Assert.assertTrue(VfsUtil.exist(pathResolver.getBasePath() + fileItem.getPath()));
-			
+
 			FileItem file = fileService.load(fileItem.getId());
 			Assert.assertNotNull(file);
 			Assert.assertTrue(VfsUtil.exist(pathResolver.getBasePath() + fileItem.getPath()));

@@ -7,22 +7,22 @@
 		<result property="writeTime" column="WRITE_TIME" />
 	</resultMap>
 
-	<select id="loadMacAddress" parameterType="string" resultMap="MacAddress">
+	<select id="load" parameterType="string" resultMap="MacAddress">
 		select <include refid="MacAddressProperties"/> from MAC_ADDRESS where MAC = #{mac}
 	</select>
 
-	<insert id="insertMacAddress" parameterType="org.vivus.nda.tools.entity.MacAddress">
+	<insert id="insert" parameterType="org.vivus.nda.tools.entity.MacAddress">
 		insert into MAC_ADDRESS(<include refid="MacAddressProperties"/>)
 		values(#{mac}, #{code}, #{writeTime});
 	</insert>
 
-	<update id="updateMacAddress" parameterType="org.vivus.nda.tools.entity.MacAddress">
+	<update id="update" parameterType="org.vivus.nda.tools.entity.MacAddress">
 		update MAC_ADDRESS
 		set WRITE_TIME = #{writeTime}, CODE = #{code}
 		where MAC = #{mac}
 	</update>
 
-	<delete id="deleteMacAddress" parameterType="string">
+	<delete id="delete" parameterType="string">
 		delete from MAC_ADDRESS where MAC = #{mac}
 	</delete>
 

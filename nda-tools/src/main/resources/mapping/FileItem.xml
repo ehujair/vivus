@@ -9,13 +9,13 @@
 		<result property="size" column="SIZE" />
 	</resultMap>
 
-	<select id="loadFileItem" parameterType="string" resultMap="FileItem">
+	<select id="load" parameterType="string" resultMap="FileItem">
 		select
 		<include refid="FileItemProperties" />
 		from FILE_ITEM where ID = #{id}
 	</select>
 
-	<insert id="insertFileItem" parameterType="org.vivus.nda.tools.entity.FileItem">
+	<insert id="insert" parameterType="org.vivus.nda.tools.entity.FileItem">
 		insert into FILE_ITEM(
 		<include refid="FileItemProperties" />
 		)
@@ -28,7 +28,7 @@
 		)
 	</insert>
 
-	<update id="updateFileItem" parameterType="org.vivus.nda.tools.entity.FileItem">
+	<update id="update" parameterType="org.vivus.nda.tools.entity.FileItem">
 		update FILE_ITEM
 		set
 		NAME = #{name},
@@ -39,7 +39,7 @@
 		#{id}
 	</update>
 
-	<delete id="deleteFileItem" parameterType="string">
+	<delete id="delete" parameterType="string">
 		delete from FILE_ITEM
 		where ID = #{id}
 	</delete>
@@ -48,7 +48,7 @@
 		ID, NAME, PATH, TYPE, SIZE
 	</sql>
 
-	<select id="findByCriteriaFileItem" parameterType="org.vivus.nda.tools.impl.query.FileQuery"
+	<select id="findByCriteria" parameterType="org.vivus.nda.tools.impl.query.FileQuery"
 		resultMap="FileItem">
 		${limitBefore}
 		select fileItem.*
@@ -56,7 +56,7 @@
 		${orderByString}
 		${limitAfter}
 	</select>
-	<select id="countByCriteriaFileItem" parameterType="org.vivus.nda.tools.impl.query.FileQuery"
+	<select id="countByCriteria" parameterType="org.vivus.nda.tools.impl.query.FileQuery"
 		resultType="long">
 		select count(distinct fileItem.ID)
 		<include refid="criteriaSql" />

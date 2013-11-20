@@ -9,11 +9,11 @@
 		<result property="recycle" column="RECYCLE" />
 	</resultMap>
 
-	<select id="loadKeyValue" parameterType="string" resultMap="KeyValue">
+	<select id="load" parameterType="string" resultMap="KeyValue">
 		select <include refid="KeyValueProperties"/> from KEY_VALUE where KEY_ = #{key}
 	</select>
 
-	<insert id="insertKeyValue" parameterType="org.vivus.nda.tools.entity.KeyValue">
+	<insert id="insert" parameterType="org.vivus.nda.tools.entity.KeyValue">
 		insert into KEY_VALUE(<include refid="KeyValueProperties"/>)
 		values(
 			#{key},
@@ -24,7 +24,7 @@
 			)
 	</insert>
 
-	<update id="updateKeyValue" parameterType="org.vivus.nda.tools.entity.KeyValue">
+	<update id="update" parameterType="org.vivus.nda.tools.entity.KeyValue">
 		update KEY_VALUE
 		set MIN_VALUE = #{minValue},
 			MAX_VALUE = #{maxValue},
@@ -33,7 +33,7 @@
 		where KEY_ = #{key}
 	</update>
 
-	<delete id="deleteKeyValue" parameterType="string">
+	<delete id="delete" parameterType="string">
 		delete from KEY_VALUE where KEY_ = #{key}
 	</delete>
 

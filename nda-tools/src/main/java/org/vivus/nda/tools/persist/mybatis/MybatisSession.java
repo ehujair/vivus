@@ -21,34 +21,34 @@ public class MybatisSession implements ISession, ITransaction {
 	}
 
 	@Override
-	public <T> T load(String id, Class<T> clazz) {
-		return sqlSession.selectOne(getStatement("load", clazz), id);
+	public <T> T load(String id) {
+		return sqlSession.selectOne(getStatement("load"), id);
 	}
 
 	@Override
-	public <T> void insert(T obj) {
-		sqlSession.insert(getStatement("insert", obj.getClass()), obj);
+	public void insert(Object obj) {
+		sqlSession.insert(getStatement("insert"), obj);
 	}
 
 	@Override
-	public <T> void update(T obj) {
-		sqlSession.update(getStatement("update", obj.getClass()), obj);
+	public void update(Object obj) {
+		sqlSession.update(getStatement("update"), obj);
 	}
 
 	@Override
-	public <T> void delete(String id, Class<T> clazz) {
-		sqlSession.delete(getStatement("delete", clazz), id);
+	public void delete(String id) {
+		sqlSession.delete(getStatement("delete"), id);
 	}
 
 	@Override
-	public <T> List<T> list(Object criteria, Page page, Class<T> clazz) {
-		return sqlSession.selectList(getStatement("findByCriteria", clazz), criteria,
+	public <T> List<T> list(Object criteria, Page page) {
+		return sqlSession.selectList(getStatement("findByCriteria"), criteria,
 				new RowBounds(page.getFirstResult(), page.getMaxResults()));
 	}
 
 	@Override
-	public <T> long count(Object criteria, Class<T> clazz) {
-		return sqlSession.selectOne(getStatement("countByCriteria", clazz), criteria);
+	public long count(Object criteria) {
+		return sqlSession.selectOne(getStatement("countByCriteria"), criteria);
 	}
 
 	@Override
@@ -61,8 +61,30 @@ public class MybatisSession implements ISession, ITransaction {
 		sqlSession.rollback();
 	}
 
-	private String getStatement(String prefix, Class<?> clazz) {
-		return prefix + clazz.getSimpleName();
+	private String getStatement(String prefix) {
+		return getCallerStackTrace().getClassName() + "." + prefix;
 	}
 
+	private StackTraceElement getCallerStackTrace() {
+		StackTraceElement stack[] = new Throwable().getStackTrace();
+		int i = 0;
+		String className = getClass().getName();
+		while (i < stack.length) {
+			StackTraceElement frame = stack[i];
+			String cname = frame.getClassName();
+			if (cname.equals(className)) {
+				break;
+			}
+			i++;
+		}
+		while (i < stack.length) {
+			StackTraceElement frame = stack[i];
+			String cname = frame.getClassName();
+			if (!cname.equals(className)) {
+				return frame;
+			}
+			i++;
+		}
+		return null;
+	}
 }

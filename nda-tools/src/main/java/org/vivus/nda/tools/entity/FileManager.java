@@ -12,7 +12,7 @@ public class FileManager extends AManager {
 	}
 
 	public FileItem load(String id) {
-		return getSession().load(id, FileItem.class);
+		return getSession().load(id);
 	}
 
 	public void update(FileItem fileItem) {
@@ -20,14 +20,14 @@ public class FileManager extends AManager {
 	}
 
 	public void delete(String id) {
-		getSession().delete(id, FileItem.class);
+		getSession().delete(id);
 	}
 
 	public List<FileItem> findByCriteria(IFileQuery fileQuery, Page page) {
-		return getSession().list(fileQuery, page, FileItem.class);
+		return getSession().list(fileQuery, page);
 	}
 	
 	public long countByCriteria(IFileQuery fileQuery) {
-		return getSession().count(fileQuery, FileItem.class);
+		return getSession().count(fileQuery);
 	}
 }

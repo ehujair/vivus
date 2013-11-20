@@ -2,7 +2,7 @@ package org.vivus.nda.tools.entity;
 
 public class KeyValueManager extends AManager {
 	public KeyValue load(String key) {
-		return getSession().load(key, KeyValue.class);
+		return getSession().load(key);
 	}
 
 	public String insert(KeyValue keyValue) {
@@ -15,6 +15,6 @@ public class KeyValueManager extends AManager {
 	}
 
 	public void delete(String key) {
-		getSession().delete(key, KeyValue.class);
+		getSession().delete(key);
 	}
 }

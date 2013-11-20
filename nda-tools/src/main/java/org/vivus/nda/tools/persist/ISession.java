@@ -7,15 +7,15 @@ import org.vivus.nda.tools.query.Page;
 public interface ISession {
 	void close();
 
-	<T> T load(String id, Class<T> clazz);
+	<T> T load(String id);
 
-	<T> void insert(T obj);
+	void insert(Object obj);
 
-	<T> void update(T obj);
+	void update(Object obj);
 
-	<T> void delete(String id, Class<T> clazz);
+	void delete(String id);
 
-	<T> List<T> list(Object criteria, Page page, Class<T> clazz);
+	<T> List<T> list(Object criteria, Page page);
 
-	<T> long count(Object criteria, Class<T> clazz);
+	long count(Object criteria);
 }
