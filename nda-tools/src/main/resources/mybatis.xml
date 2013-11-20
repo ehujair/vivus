@@ -30,5 +30,6 @@
 	<mappers>
 		<mapper resource="mapping/KeyValue.xml" />
 		<mapper resource="mapping/MacAddress.xml" />
+		<mapper resource="mapping/FileItem.xml" />
 	</mappers>
 </configuration>

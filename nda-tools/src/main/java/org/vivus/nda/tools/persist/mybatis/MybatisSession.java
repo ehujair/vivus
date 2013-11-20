@@ -1,8 +1,12 @@
 package org.vivus.nda.tools.persist.mybatis;
 
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.vivus.nda.tools.persist.ISession;
 import org.vivus.nda.tools.persist.ITransaction;
+import org.vivus.nda.tools.query.Page;
 
 public class MybatisSession implements ISession, ITransaction {
 	SqlSession sqlSession;
@@ -21,10 +25,6 @@ public class MybatisSession implements ISession, ITransaction {
 		return sqlSession.selectOne(getStatement("load", clazz), id);
 	}
 
-	private String getStatement(String prefix, Class<?> clazz) {
-		return prefix + clazz.getSimpleName(); 
-	}
-
 	@Override
 	public <T> void insert(T obj) {
 		sqlSession.insert(getStatement("insert", obj.getClass()), obj);
@@ -41,6 +41,17 @@ public class MybatisSession implements ISession, ITransaction {
 	}
 
 	@Override
+	public <T> List<T> list(Object criteria, Page page, Class<T> clazz) {
+		return sqlSession.selectList(getStatement("findByCriteria", clazz), criteria,
+				new RowBounds(page.getFirstResult(), page.getMaxResults()));
+	}
+
+	@Override
+	public <T> long count(Object criteria, Class<T> clazz) {
+		return sqlSession.selectOne(getStatement("countByCriteria", clazz), criteria);
+	}
+
+	@Override
 	public void commit() {
 		sqlSession.commit();
 	}
@@ -48,6 +59,10 @@ public class MybatisSession implements ISession, ITransaction {
 	@Override
 	public void rollback() {
 		sqlSession.rollback();
+	}
+
+	private String getStatement(String prefix, Class<?> clazz) {
+		return prefix + clazz.getSimpleName();
 	}
 
 }

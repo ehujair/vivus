@@ -8,8 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vivus.nda.tools.config.AConfiguration;
 import org.vivus.nda.tools.entity.AManager;
+import org.vivus.nda.tools.entity.FileManager;
 import org.vivus.nda.tools.entity.KeyValueManager;
 import org.vivus.nda.tools.entity.MacAddressManager;
+import org.vivus.nda.tools.file.IPathResolver;
 import org.vivus.nda.tools.persist.ISession;
 import org.vivus.nda.tools.persist.ISessionFactory;
 import org.vivus.nda.tools.persist.ITransaction;
@@ -22,6 +24,7 @@ public class CommandContext {
 	ISessionFactory sessionFactory;
 	ISession session;
 	ITransaction transaction;
+	IPathResolver pathResolver;
 	Map<Class<? extends AManager>, AManager> managers = new HashMap<Class<? extends AManager>, AManager>();
 	Throwable exception;
 
@@ -30,6 +33,7 @@ public class CommandContext {
 		this.configuration = configuration;
 		sessionFactory = configuration.getSessionFactory();
 		transaction = configuration.getTransactionFactory().openTransaction(this);
+		pathResolver = configuration.getPathResolver();
 	}
 
 	public AConfiguration getConfiguration() {
@@ -58,6 +62,17 @@ public class CommandContext {
 		this.sessionFactory = sessionFactory;
 	}
 
+	public IPathResolver getPathResolver() {
+		if (pathResolver == null) {
+			throw new RuntimeException("no PathResolver configured");
+		}
+		return pathResolver;
+	}
+
+	public void setPathResolver(IPathResolver pathResolver) {
+		this.pathResolver = pathResolver;
+	}
+
 	@SuppressWarnings("unchecked")
 	protected <T extends AManager> T getManager(Class<T> clazz) {
 		T manager = (T) managers.get(clazz);
@@ -80,6 +95,10 @@ public class CommandContext {
 
 	public KeyValueManager getKeyValueManager() {
 		return getManager(KeyValueManager.class);
+	}
+	
+	public FileManager getFileManager() {
+		return getManager(FileManager.class);
 	}
 
 	public void close() {

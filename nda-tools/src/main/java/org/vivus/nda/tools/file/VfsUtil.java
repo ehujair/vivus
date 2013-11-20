@@ -1,5 +1,6 @@
 package org.vivus.nda.tools.file;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -8,13 +9,21 @@ import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.FileType;
+import org.apache.commons.vfs2.FileUtil;
 import org.apache.commons.vfs2.Selectors;
 import org.apache.commons.vfs2.VFS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 扩展{@link FileUtil}的工具类
+ * 
+ * @author Administrator
+ * @see FileUtil
+ */
 public class VfsUtil {
 	private static final Logger LOGGER = LoggerFactory.getLogger(VfsUtil.class);
+	private static final int BUFFER_SIZE = 1024;
 
 	private static FileSystemManager fsm;
 
@@ -30,28 +39,84 @@ public class VfsUtil {
 	}
 
 	public static FileObject resolveFile(String path) {
-		return resolveFile(ClassLoader.getSystemResource("").toString(), path);
-	}
-	
-	public static FileObject resolveFile(String basePath, String path) {
 		try {
-			return fsm.resolveFile(fsm.resolveFile(basePath), path);
+			return fsm.resolveFile(path);
 		} catch (FileSystemException e) {
 			throw new FileException("resolve file exception", e);
 		}
 	}
 
-	public static void createFile(String path) {
+	public static long getSize(FileObject file) {
 		try {
-			resolveFile(path).createFile();
+			return file.getContent().getSize();
 		} catch (FileSystemException e) {
-			throw new FileException("create file exception", e);
+			throw new FileException("", e);
 		}
 	}
 
-	public static void createFile(String basePath, String path) {
+	public static void writeContent(InputStream inputStream, String destFile) {
+		FileObject target = resolveFile(destFile);
+		writeContent(inputStream, target);
+	}
+
+	public static void writeContent(InputStream inputStream, FileObject target) {
+		OutputStream outputStream = null;
 		try {
-			resolveFile(basePath, path).createFile();
+			outputStream = target.getContent().getOutputStream();
+			writeContent(inputStream, outputStream);
+		} catch (FileSystemException e) {
+			throw new FileException("", e);
+		} finally {
+			if (outputStream != null) {
+				try {
+					outputStream.close();
+				} catch (IOException e) {
+					LOGGER.error("", e);
+					// ignore me;
+				}
+			}
+		}
+	}
+
+	public static void writeContent(String source, OutputStream outputStream) {
+		InputStream inputStream = null;
+		try {
+			inputStream = resolveFile(source).getContent().getInputStream();
+			writeContent(inputStream, outputStream);
+		} catch (FileSystemException e) {
+			throw new FileException("", e);
+		} finally {
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					LOGGER.error("", e);
+					// ignore me;
+				}
+			}
+		}
+	}
+
+	public static void writeContent(InputStream inputStream, OutputStream outputStream) {
+		try {
+			final byte[] buffer = new byte[BUFFER_SIZE];
+			while (true) {
+				final int nread = inputStream.read(buffer);
+				if (nread < 0) {
+					break;
+				}
+				outputStream.write(buffer, 0, nread);
+			}
+		} catch (IOException e) {
+			throw new FileException("", e);
+		}
+	}
+
+	public static FileObject createFile(String path) {
+		try {
+			FileObject file = resolveFile(path);
+			file.createFile();
+			return file;
 		} catch (FileSystemException e) {
 			throw new FileException("create file exception", e);
 		}
@@ -65,25 +130,19 @@ public class VfsUtil {
 		}
 	}
 
-	public static void delete(String basePath, String path) {
+	public static boolean exist(String path) {
 		try {
-			resolveFile(basePath, path).delete(Selectors.SELECT_ALL);
+			return resolveFile(path).exists();
 		} catch (FileSystemException e) {
-			throw new FileException("delete file exception", e);
+			throw new FileException("", e);
 		}
 	}
-	
+
+	// the code under this line is to be deleted
+
 	public static void clear(String path) {
 		try {
 			resolveFile(path).delete(Selectors.EXCLUDE_SELF);
-		} catch (FileSystemException e) {
-			throw new FileException("delete file exception", e);
-		}
-	}
-	
-	public static void clear(String basePath, String path) {
-		try {
-			resolveFile(basePath, path).delete(Selectors.EXCLUDE_SELF);
 		} catch (FileSystemException e) {
 			throw new FileException("delete file exception", e);
 		}
@@ -98,33 +157,9 @@ public class VfsUtil {
 		}
 	}
 
-	public static boolean exist(String path) {
-		try {
-			return resolveFile(path).exists();
-		} catch (FileSystemException e) {
-			throw new FileException("", e);
-		}
-	}
-	
-	public static boolean exist(String basePath, String path) {
-		try {
-			return resolveFile(basePath, path).exists();
-		} catch (FileSystemException e) {
-			throw new FileException("", e);
-		}
-	}
-
 	public static boolean isFolder(String path) {
 		try {
 			return resolveFile(path).getType().equals(FileType.FOLDER);
-		} catch (FileSystemException e) {
-			throw new FileException("", e);
-		}
-	}
-	
-	public static boolean isFolder(String basePath, String path) {
-		try {
-			return resolveFile(basePath, path).getType().equals(FileType.FOLDER);
 		} catch (FileSystemException e) {
 			throw new FileException("", e);
 		}
@@ -149,14 +184,6 @@ public class VfsUtil {
 	public static boolean isFile(String path) {
 		try {
 			return resolveFile(path).getType().equals(FileType.FILE);
-		} catch (FileSystemException e) {
-			throw new FileException("", e);
-		}
-	}
-	
-	public static boolean isFile(String basePath, String path) {
-		try {
-			return resolveFile(basePath, path).getType().equals(FileType.FILE);
 		} catch (FileSystemException e) {
 			throw new FileException("", e);
 		}

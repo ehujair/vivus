@@ -3,6 +3,7 @@ package org.vivus.nda.tools.config;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
@@ -10,9 +11,11 @@ import org.vivus.nda.tools.IEngine;
 import org.vivus.nda.tools.context.ACommandInterceptor;
 import org.vivus.nda.tools.context.CommandContextInterceptor;
 import org.vivus.nda.tools.context.LogInterceptor;
+import org.vivus.nda.tools.file.DailyLocalPathResolver;
 import org.vivus.nda.tools.impl.AService;
-import org.vivus.nda.tools.impl.Engine;
+import org.vivus.nda.tools.impl.DbIdGenerator;
 import org.vivus.nda.tools.impl.DbMacGenerator;
+import org.vivus.nda.tools.impl.Engine;
 import org.vivus.nda.tools.persist.mybatis.MybatisSessionFactory;
 import org.vivus.nda.tools.persist.mybatis.MybatisTransactionFactory;
 import org.vivus.nda.tools.util.ResourceUtil;
@@ -35,20 +38,34 @@ public class Configuration extends AConfiguration {
 	public IEngine buildEngine() {
 		initSessionFactory();
 		initTransactionFactory();
+		initPathResolver();
 		initCommandExecutors();
 		initServices();
 		initMacGenerator();
+		initIdGenerator();
 		return new Engine(this);
 	}
 
 	protected void initSessionFactory() {
-		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(ResourceUtil
-				.getResourceAsStream(mybatisConfigFile));
+		setDatabaseType(MybatisSessionFactory.H2);
+		Properties properties = new Properties();
+		if (databaseType != null) {
+			properties.put("limitBefore",
+					MybatisSessionFactory.databaseSpecificLimitBeforeStatements.get(databaseType));
+			properties.put("limitAfter",
+					MybatisSessionFactory.databaseSpecificLimitAfterStatements.get(databaseType));
+		}
+		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(
+				ResourceUtil.getResourceAsStream(mybatisConfigFile), properties);
 		sessionFactory = new MybatisSessionFactory(sqlSessionFactory);
 	}
 
 	protected void initTransactionFactory() {
 		transactionFactory = new MybatisTransactionFactory();
+	}
+
+	protected void initPathResolver() {
+		pathResolver = new DailyLocalPathResolver();
 	}
 
 	protected void initCommandExecutors() {
@@ -90,6 +107,7 @@ public class Configuration extends AConfiguration {
 
 	protected void initServices() {
 		initService(macAddressService);
+		initService(fileService);
 	}
 
 	protected void initService(Object service) {
@@ -100,6 +118,10 @@ public class Configuration extends AConfiguration {
 
 	protected void initMacGenerator() {
 		macGenerator = new DbMacGenerator(commandExecutor);
+	}
+	
+	protected void initIdGenerator() {
+		idGenerator = new DbIdGenerator(commandExecutor);
 	}
 
 	// getter & setter

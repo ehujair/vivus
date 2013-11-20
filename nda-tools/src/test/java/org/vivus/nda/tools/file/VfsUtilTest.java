@@ -6,8 +6,9 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class VfsUtilsTest {
-	private static final String BASE_FOLDER = "VfsUtilsTest/";
+public class VfsUtilTest {
+	private static final String BASE_FOLDER = ClassLoader.getSystemResource("").toString()
+			+ "VfsUtilsTest/";
 
 	@Test
 	public void testAll() {
@@ -28,9 +29,6 @@ public class VfsUtilsTest {
 		String absolutePath = "D:/VfsUtilsTest/VfsUtilsTest.txt";
 		FileObject absoluteFile = VfsUtil.resolveFile(absolutePath);
 		System.out.println(absoluteFile);
-		String absolutePath2 = "/VfsUtilsTest/VfsUtilsTest.txt";
-		FileObject absoluteFile2 = VfsUtil.resolveFile(absolutePath2);
-		System.out.println(absoluteFile2);
 	}
 
 	// 打包后测试,检查是否在jar包内生成或操作相关文件
@@ -111,7 +109,7 @@ public class VfsUtilsTest {
 	@Test
 	public void testCopyFolder() throws FileSystemException {
 		String srcFolder = BASE_FOLDER;
-		String destFolder = "VfsUtilsTest-copy/";
+		String destFolder = BASE_FOLDER + "VfsUtilsTest-copy/";
 		String srcFile = srcFolder + "VfsUtilsTest.txt";
 		VfsUtil.createFile(srcFile);
 		Assert.assertTrue(!VfsUtil.exist(destFolder));

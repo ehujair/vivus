@@ -13,3 +13,12 @@ create table MAC_ADDRESS (
     WRITE_TIME TIMESTAMP,
     primary key (MAC)
 );
+
+create table FILE_ITEM (
+    ID varchar(64),
+    NAME varchar(500),
+    PATH varchar(1000),
+    TYPE varchar(10),
+    SIZE BIGINT,
+    primary key (ID)
+);

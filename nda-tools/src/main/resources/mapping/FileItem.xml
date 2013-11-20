@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.vivus.nda.tools.entity.FileManager">
+	<resultMap type="org.vivus.nda.tools.entity.FileItem" id="FileItem">
+		<id property="id" column="ID" />
+		<result property="name" column="NAME" />
+		<result property="path" column="PATH" />
+		<result property="type" column="TYPE" />
+		<result property="size" column="SIZE" />
+	</resultMap>
+
+	<select id="loadFileItem" parameterType="string" resultMap="FileItem">
+		select
+		<include refid="FileItemProperties" />
+		from FILE_ITEM where ID = #{id}
+	</select>
+
+	<insert id="insertFileItem" parameterType="org.vivus.nda.tools.entity.FileItem">
+		insert into FILE_ITEM(
+		<include refid="FileItemProperties" />
+		)
+		values(
+		#{id},
+		#{name},
+		#{path},
+		#{type},
+		#{size}
+		)
+	</insert>
+
+	<update id="updateFileItem" parameterType="org.vivus.nda.tools.entity.FileItem">
+		update FILE_ITEM
+		set
+		NAME = #{name},
+		PATH = #{path},
+		TYPE = #{type},
+		SIZE = #{size}
+		where ID =
+		#{id}
+	</update>
+
+	<delete id="deleteFileItem" parameterType="string">
+		delete from FILE_ITEM
+		where ID = #{id}
+	</delete>
+
+	<sql id="FileItemProperties">
+		ID, NAME, PATH, TYPE, SIZE
+	</sql>
+
+	<select id="findByCriteriaFileItem" parameterType="org.vivus.nda.tools.impl.query.FileQuery"
+		resultMap="FileItem">
+		${limitBefore}
+		select fileItem.*
+		<include refid="criteriaSql" />
+		${orderByString}
+		${limitAfter}
+	</select>
+	<select id="countByCriteriaFileItem" parameterType="org.vivus.nda.tools.impl.query.FileQuery"
+		resultType="long">
+		select count(distinct fileItem.ID)
+		<include refid="criteriaSql" />
+	</select>
+	<sql id="criteriaSql">
+		from FILE_ITEM fileItem
+		<where>
+			<if test="id != null and id != ''">
+				fileItem.ID = #{id}
+			</if>
+			<if test="name != null and name != ''">
+				and fileItem.NAME = #{name}
+			</if>
+			<if test="nameLike != null and nameLike != ''">
+				and fileItem.NAME like #{nameLike}
+			</if>
+			<if test="type != null and type != ''">
+				and fileItem.TYPE = #{type}
+			</if>
+			<if test="min != 0 and max != 0">
+				and fileItem.SIZE between #{min} and #{max}
+			</if>
+			<if test="min == 0 and max != 0">
+				and fileItem.SIZE &lt; #{max}
+			</if>
+			<if test="min != 0 and max == 0">
+				and fileItem.SIZE &gt; #{min}
+			</if>
+		</where>
+	</sql>
+</mapper>
