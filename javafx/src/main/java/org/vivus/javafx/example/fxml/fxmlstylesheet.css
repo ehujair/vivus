@@ -1,0 +1,12 @@
+@CHARSET "UTF-8";
+
+/*  
+    Document   : FXMLstylesheet.css 
+*/
+.grid-pane {
+	-fx-padding: 80 0 0 0;
+}
+
+.label {
+	-fx-font: normal 36px Tahoma;
+}

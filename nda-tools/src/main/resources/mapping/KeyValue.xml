@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.vivus.nda.tools.entity.KeyValueManager">
+	<resultMap type="org.vivus.nda.tools.entity.KeyValue" id="KeyValue">
+		<id property="key" column="KEY_" />
+		<result property="minValue" column="MIN_VALUE" />
+		<result property="maxValue" column="MAX_VALUE" />
+		<result property="currentValue" column="CURRENT_VALUE" />
+		<result property="recycle" column="RECYCLE" />
+	</resultMap>
+
+	<select id="load" parameterType="string" resultMap="KeyValue">
+		select <include refid="KeyValueProperties"/> from KEY_VALUE where KEY_ = #{key}
+	</select>
+
+	<insert id="insert" parameterType="org.vivus.nda.tools.entity.KeyValue">
+		insert into KEY_VALUE(<include refid="KeyValueProperties"/>)
+		values(
+			#{key},
+			#{minValue},
+			#{maxValue},
+			#{currentValue},
+			#{recycle}
+			)
+	</insert>
+
+	<update id="update" parameterType="org.vivus.nda.tools.entity.KeyValue">
+		update KEY_VALUE
+		set MIN_VALUE = #{minValue},
+			MAX_VALUE = #{maxValue},
+			CURRENT_VALUE = #{currentValue},
+			RECYCLE = #{recycle}
+		where KEY_ = #{key}
+	</update>
+
+	<delete id="delete" parameterType="string">
+		delete from KEY_VALUE where KEY_ = #{key}
+	</delete>
+
+	<sql id="KeyValueProperties">
+		KEY_, MIN_VALUE, MAX_VALUE, CURRENT_VALUE, RECYCLE
+	</sql>
+</mapper>
